@@ -26,13 +26,24 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/my-trucks', auth, async (req, res) => {
+  try {
+    const userId = req.user.id; // Extract user ID from the authenticated user
+    const trucks = await FoodTruck.find({ user: userId });
+    res.status(200).json(trucks);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST create a new food truck (only authenticated users)
 // POST create a new food truck (only authenticated users)
 router.post('/', auth, async (req, res) => {
   const { name, description, cuisine, location, menu, operatingHours, reviews } = req.body;
 
   // Validate required fields
-  if (!name || !cuisine || !location) {
-    return res.status(400).json({ message: 'Please provide all required fields: name, cuisine, and location' });
+  if (!name || !location || !location.lat || !location.lng) {
+    return res.status(400).json({ message: 'Please provide all required fields: name and location with lat/lng' });
   }
 
   const newTruck = new FoodTruck({
@@ -43,6 +54,7 @@ router.post('/', auth, async (req, res) => {
     menu,
     operatingHours,
     reviews,
+    user: req.user.id // Assign the authenticated user as the truck owner
   });
 
   try {
@@ -52,6 +64,7 @@ router.post('/', auth, async (req, res) => {
     res.status(400).json({ message: 'Failed to create food truck. Please try again' });
   }
 });
+
 
 // PUT update a food truck by ID (only authenticated users)
 router.put('/:id', auth, async (req, res) => {

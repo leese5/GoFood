@@ -1,0 +1,53 @@
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #333;
+  --background-color: #f8f9fa;
+  --button-color: #28a745;
+  --text-color: #555;
+  --light-gray: #f1f1f1;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+h1, h2, h3, h4 {
+  color: var(--secondary-color);
+}
+
+
+.auth-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #4CAF50;
+}
+
+.error-message {
+  color: red;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin: auto;
+}
+
+input {
+  padding: 10px;
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}

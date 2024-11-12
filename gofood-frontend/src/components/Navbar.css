@@ -1,0 +1,36 @@
+.navbar {
+  background-color: var(--primary-color) !important;
+  padding: 10px 20%;
+}
+
+.navbar-nav {
+  display: flex; /* Ensures horizontal layout */
+  flex-direction: row; /* Set direction to horizontal */
+  gap: 15px; /* Space between navbar items */
+  margin-left: auto; /* Aligns items to the right */
+  list-style: none; /* Removes default list styling */
+  padding: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center; /* Center-align items vertically */
+}
+
+.nav-link, .navbar-brand {
+  color: black !important;
+  text-decoration: none;
+  padding: 5px 10px; /* Optional: Add padding for clickable area */
+}
+
+.nav-link:hover {
+  color: var(--button-color) !important;
+}
+
+.btn-danger {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px; /* Ensures consistent padding with links */
+  cursor: pointer;
+}
