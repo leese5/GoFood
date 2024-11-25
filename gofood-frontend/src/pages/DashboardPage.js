@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllFoodTrucks, getUserFoodTrucks, createFoodTruck, removeFoodTruck } from '../services/foodTruckService';
+import { getUserFoodTrucks, createFoodTruck, removeFoodTruck } from '../services/foodTruckService';
+import { jwtDecode } from 'jwt-decode';
 import './DashboardPage.css';
 
 function DashboardPage() {
@@ -14,6 +15,8 @@ function DashboardPage() {
   });
   const [locationError, setLocationError] = useState('');
   const [menuItem, setMenuItem] = useState('');
+  const [userId, setUserId] = useState('');
+  const [error, setError] = useState(null);
 
   const timeOptions = [
     "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
@@ -25,22 +28,32 @@ function DashboardPage() {
   const [closingTime, setClosingTime] = useState('');
 
   useEffect(() => {
-    const fetchUserTrucks = async () => {
-      try {
-        const data = await getUserFoodTrucks();
-        setTrucks(data);
-      } catch (error) {
-        console.error('Error fetching user trucks:', error);
-      }
-    };
-    fetchUserTrucks();
+    // Extract user ID from token
+    const token = localStorage.getItem('token'); // Replace with your token storage mechanism
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUserId(decoded.user?.id || decoded.id); // Adjust based on your token structure
+    } else {
+      setError('User not authenticated.');
+    }
+  }, []);
 
-    // const fetchTrucks = async () => {
-    //   const data = await getAllFoodTrucks();
-    //   setTrucks(data);
-    // };
-    // fetchTrucks();
+  useEffect(() => {
+    if (userId) {
+      const fetchUserTrucks = async () => {
+        try {
+          const data = await getUserFoodTrucks(userId);
+          setTrucks(data);
+        } catch (err) {
+          console.error('Error fetching user trucks:', err);
+          setError('Unable to fetch food trucks. Please try again later.');
+        }
+      };
+      fetchUserTrucks();
+    }
+  }, [userId]);
 
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setNewTruck((prevTruck) => ({
@@ -97,6 +110,7 @@ function DashboardPage() {
       setMenuItem('');
     } catch (error) {
       console.error('Error creating truck:', error);
+      setError('Failed to create food truck. Please try again.');
     }
   };
 
@@ -106,6 +120,7 @@ function DashboardPage() {
       setTrucks(trucks.filter((truck) => truck._id !== truckId));
     } catch (error) {
       console.error('Error deleting truck:', error);
+      setError('Failed to delete food truck.');
     }
   };
 
@@ -113,6 +128,7 @@ function DashboardPage() {
     <div className="dashboard-container">
       <h1>Dashboard</h1>
 
+      {error && <p className="error-message">{error}</p>}
       {locationError && <p className="error-message">{locationError}</p>}
 
       <div className="form-container">

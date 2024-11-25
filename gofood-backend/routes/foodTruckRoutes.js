@@ -26,15 +26,46 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.get('/my-trucks', auth, async (req, res) => {
-  try {
-    const userId = req.user.id; // Extract user ID from the authenticated user
-    const trucks = await FoodTruck.find({ user: userId });
-    res.status(200).json(trucks);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+// router.get('/user/:id/foodtrucks', async (req, res) => {
+//   const userId = req.params.id;
+
+//   try {
+//     // Fetch all food trucks for the specified user
+//     const trucks = await FoodTruck.find({ user: userId });
+
+//     // Filter public trucks by checking if the "public" field exists or has a value of true
+//     const publicTrucks = trucks.filter((truck) => truck.public === true);
+
+//     // Handle no public trucks found
+//     if (publicTrucks.length === 0) {
+//       return res.status(404).json({ message: "No public food trucks found for the given user." });
+//     }
+
+//     // Ensure request accepts JSON
+//     if (req.headers['accept'] !== 'application/json') {
+//       return res.status(406).json({ message: "Not Acceptable. Please request with 'Accept: application/json'." });
+//     }
+
+//     // Format the public food trucks data
+//     const formattedTrucks = publicTrucks.map((truck) => ({
+//       id: truck._id,
+//       name: truck.name,
+//       cuisine: truck.cuisine,
+//       description: truck.description,
+//       operatingHours: truck.operatingHours,
+//       menu: truck.menu,
+//       location: truck.location,
+//       owner: truck.user,
+//       self: `${req.protocol}://${req.get('host')}/api/foodtrucks/${truck._id}`,
+//     }));
+
+//     // Send the formatted trucks as a response
+//     res.status(200).json(formattedTrucks);
+//   } catch (err) {
+//     console.error("Error fetching food trucks:", err.message);
+//     res.status(500).json({ message: "Server error, please try again later." });
+//   }
+// });
 
 // POST create a new food truck (only authenticated users)
 // POST create a new food truck (only authenticated users)
