@@ -6,7 +6,7 @@ const auth = require('../middleware/authMiddleware');
 // GET all food trucks
 router.get('/', async (req, res) => {
   try {
-    const trucks = await FoodTruck.find();
+    const trucks = await FoodTruck.find({public:true});
     res.json(trucks);
   } catch (err) {
     res.status(500).json({ message: 'Server error, please try again later' });
@@ -70,7 +70,7 @@ router.get('/:id', async (req, res) => {
 // POST create a new food truck (only authenticated users)
 // POST create a new food truck (only authenticated users)
 router.post('/', auth, async (req, res) => {
-  const { name, description, cuisine, location, menu, operatingHours, reviews } = req.body;
+  const { name, description, cuisine, location, menu, operatingHours, public } = req.body;
 
   // Validate required fields
   if (!name || !location || !location.lat || !location.lng) {
@@ -84,7 +84,7 @@ router.post('/', auth, async (req, res) => {
     location,
     menu,
     operatingHours,
-    reviews,
+    public,
     user: req.user.id // Assign the authenticated user as the truck owner
   });
 
@@ -99,13 +99,13 @@ router.post('/', auth, async (req, res) => {
 
 // PUT update a food truck by ID (only authenticated users)
 router.put('/:id', auth, async (req, res) => {
-  const { name, description, cuisine, location, menu, operatingHours, reviews } = req.body;
+  const { name, description, cuisine, location, menu, operatingHours, public } = req.body;
 
   // Check if the food truck exists
   try {
     const updatedTruck = await FoodTruck.findByIdAndUpdate(
       req.params.id,
-      { name, description, cuisine, location, menu, operatingHours, reviews },
+      { name, description, cuisine, location, menu, operatingHours, public },
       { new: true, runValidators: true }
     );
     if (!updatedTruck) {
@@ -116,6 +116,28 @@ router.put('/:id', auth, async (req, res) => {
     res.status(500).json({ message: 'Failed to update food truck. Please try again' });
   }
 });
+
+router.patch('/:id/public', auth, async (req, res) => {
+  const { public } = req.body;
+
+  try {
+    const updatedTruck = await FoodTruck.findByIdAndUpdate(
+      req.params.id,
+      { public },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTruck) {
+      return res.status(404).json({ message: 'Food truck not found' });
+    }
+
+    res.json(updatedTruck);
+  } catch (err) {
+    console.error('Error updating truck status:', err.message);
+    res.status(500).json({ message: 'Failed to update truck status.' });
+  }
+});
+
 
 // DELETE a food truck by ID (only authenticated users)
 router.delete('/:id', auth, async (req, res) => {

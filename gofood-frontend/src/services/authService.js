@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode';
 
 const API_URL = 'http://localhost:5000/api/auth';
 
@@ -16,6 +17,15 @@ export const login = async (userData) => {
     localStorage.setItem('token', response.data.token);
   }
   return response.data;
+};
+
+export const isTokenExpired = () => {
+  const token = getToken();
+  if (!token) return true;
+
+  const decoded = jwtDecode(token);
+  const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+  return decoded.exp <= currentTime;
 };
 
 export const logout = () => {

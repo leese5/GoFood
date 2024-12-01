@@ -1,0 +1,27 @@
+.update-form {
+    margin: 10px 0;
+  }
+  
+  .toggle-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .toggle-button.open {
+    background-color: #28a745; /* Green for "Open" */
+  }
+  
+  .toggle-button.close {
+    background-color: #dc3545; /* Red for "Close" */
+  }
+  
+  .toggle-button:hover {
+    opacity: 0.8;
+  }
+  

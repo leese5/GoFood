@@ -9,23 +9,30 @@
   
   .truck-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Change to row for horizontal layout */
     align-items: center;
+    justify-content: flex-start;
     margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding: 10px; /* Add some padding for better spacing */
+    gap: 10px; /* Space between the cards */
+    scrollbar-width: thin; /* Optional: style the scrollbar for Firefox */
   }
   
   .truck-card {
-    width: 100%;
+    min-width: 250px; /* Set a minimum width for the cards */
     max-width: 300px;
+    min-height: 300px;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px;
-    margin: 10px 0;
+    margin: 0; /* Remove vertical margins for horizontal layout */
     cursor: pointer;
     text-align: left;
     font-family: inherit;
     font-size: inherit;
+    flex-shrink: 0; /* Prevent shrinking for scrollable layout */
   }
   
   .truck-card h3 {
@@ -45,5 +52,19 @@
   .truck-card.selected {
     border: 2px solid #4CAF50;
     background-color: #e2f4e2;
+  }
+  
+  /* Optional: Style scrollbar for Webkit browsers */
+  .truck-list::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .truck-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+  }
+  
+  .truck-list::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
   }
   

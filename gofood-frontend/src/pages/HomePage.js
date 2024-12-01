@@ -70,6 +70,10 @@ function HomePage() {
           >
             <h3>{truck.name}</h3>
             <p>{truck.description}</p>
+            <p>{truck.operatingHours}</p>
+            <ul>{truck.menu.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}</ul>
           </button>
         ))}
       </section>

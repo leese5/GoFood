@@ -21,6 +21,39 @@ export const getUserFoodTrucks = async (userId) => {
   }
 };
 
+export const toggleTruckStatus = async (truckId, newStatus) => {
+  const token = getToken();
+  const response = await axios.patch(
+    `${API_URL}/${truckId}/public`,
+    { public: newStatus }, // Send the new status
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
+
+export const updateFoodTruck = async (truckId, updatedData) => {
+  const token = getToken();
+  const response = await axios.put(
+    `${API_URL}/${truckId}`,
+    updatedData,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
+
+
+export const getUser = async(userId) => {
+  try {
+    const response = await axios.get(`${API_URL_USER}/${userId}`, {
+      headers: {Accept: 'application/json'},
+    });
+    return response.data
+  } catch (error) {
+    console.error('Error fetching user: ', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 // export const getUserFoodTrucks = async () => {
 //   const token = getToken();
 //   try {
@@ -49,5 +82,3 @@ export const removeFoodTruck = async (truckId) => {
   });
   return response.data;
 };
-
-// Add other CRUD functions as needed (update, delete)
